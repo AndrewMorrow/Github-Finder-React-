@@ -1,18 +1,22 @@
 import React, { Fragment, Component } from "react";
 import Spinner from "../layout/Spinner";
 import PropTypes from "prop-types";
+import Repos from "../repos/Repos";
 import { Link } from "react-router-dom";
 import { FaCheck, FaTimesCircle } from "react-icons/fa";
 
 export class User extends Component {
     componentDidMount() {
         this.props.getUser(this.props.match.params.login);
+        this.props.getUserRepos(this.props.match.params.login);
     }
 
     static propTypes = {
         loading: PropTypes.bool,
         user: PropTypes.object.isRequired,
         getUser: PropTypes.func.isRequired,
+        getUserRepos: PropTypes.func.isRequired,
+        repos: PropTypes.array.isRequired,
     };
 
     render() {
@@ -32,7 +36,7 @@ export class User extends Component {
             hireable,
         } = this.props.user;
 
-        const { loading } = this.props;
+        const { loading, repos } = this.props;
 
         if (loading) return <Spinner />;
 
@@ -102,6 +106,7 @@ export class User extends Component {
                         Public Gists: {public_gists}
                     </div>
                 </div>
+                <Repos repos={repos} />
             </Fragment>
         );
     }
